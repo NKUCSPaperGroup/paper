@@ -1,27 +1,3 @@
-% -*- coding: utf-8 -*-
-\documentclass[12pt,openright]{book}
-
-\usepackage{ifxetex}
-\ifxetex
-  \usepackage[bookmarksnumbered]{hyperref}
-\else
-  \usepackage[unicode,bookmarksnumbered]{hyperref}
-\fi
-
-\usepackage[emptydoublepage]{NKThesis}   % 中文
-
-%   根据需要选择 biblatex 宏包选项.
-\usepackage[backend = biber, defernumbers = true,  sorting=none,  style = nkthesis]{biblatex}
-\hypersetup{colorlinks=true,
-            pdfborder=0 0 1,
-            citecolor=black,
-            linkcolor=black}
-\usepackage{tikz}
-\usepackage{bm}
-\usepackage{caption}
-\usepackage{graphicx, subfig}
-\usepackage{fontspec}
-
 \usepackage{listings}
 \usepackage{xcolor}
 \setmonofont{Consolas}
@@ -61,21 +37,3 @@
     uniform_int_distribution,iterator,algorithm,functional,bing,numeric,},
     emphstyle=\color{CPPViolet}, 
 }
-
-\addbibresource{nkthesis.bib}
-\DeclareBibliographyCategory{cited}
-\AtEveryCitekey{\addtocategory{cited}{\thefield{entrykey}}}
-
-\title{一种高效的多物理场动力学模拟方案}
-\author{周子正\footnote{学号:1810334,电子邮箱:zhouzizheng@foxmail.com},刘雨缇\footnote{学号:1811495}，周宇江\footnote{学号:1810333}，张轩珩\footnote{学号:1810320}}
-\date{2018年 12月}
-
-\begin{document}
-\maketitle
-\include{abstract}
-\tableofcontents
-\include{content}
-%\include{references}
-\include{acknowledgements}
-
-\end{document}
