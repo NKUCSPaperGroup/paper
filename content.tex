@@ -364,6 +364,81 @@ int main()
 \caption{自由落体的真实值与模拟值} 
 \end{figure}
 
+磁场的计算时高中的常见问题，有的问题十分有趣，下面一个例子：
+
+如图\ref{eg1}所示，直径分别为$D$和$2D$的同心圆处于同一竖直面内，$O$为圆心，
+$GH$为大圆的水平直径。两圆之间的环形区域（$Ⅰ$区）和小圆内部（$Ⅱ$区）均存在垂直圆面向里的匀强磁场。
+间距为$d$的两平行金属极板间有一匀强电场，上极板开有一小孔。一质量为$m$，
+电量为$+q$的粒子由小孔下方$d/2$处静止释放，加速后粒子以竖直向上的速度$v$射出电场，
+由点紧靠大圆内侧射入磁场。不计粒子的重力。
+
+\begin{figure} [hb]
+    \centering 
+    \includegraphics[width=.5\textwidth]{eg.jpeg}
+    \caption{一个有趣的磁场问题} 
+    \label{eg1}
+\end{figure}
+
+我们可以用程序计算得到问题的结果
+{\setmainfont{Consolas}
+\begin{lstlisting}
+//程序使用Qt进行绘图
+//......ChartView:public QMainWindow
+void ChartView::createChartCir()
+{
+    //构造质点
+    masscenter mc{"mc", 
+    {2, 0, 0}, {}, 
+    {0, 1, 0}, 1, 1, 0};
+    //构造场
+    circle_magnetic_field f{{}, 3, {0, 0, -1}};
+    circle_magnetic_field f2{{}, 1, {0, 0, -1}};
+    //调整设置
+    physics_scene ps{};
+    {
+        ps.setting().delta_time = 0.001;
+        ps.setting().start_time = 0;
+        ps.setting().end_time = 40;
+        ps.setting().save_duration = 0.0025;
+        ps.setting().reaction_time = 0.02;
+    }
+    ps.add_mass_center(mc, true);
+    ps.add_field(f);
+    ps.add_field(f2);
+    ps.run();
+
+    auto re = ps.get_result("mc");//导出结果
+    auto x = map_to_double(*re.second->history(),
+    [&](const std::shared_ptr<masscenter::save_type> p)
+        -> double
+        {
+            return p->position.x();
+        });//导出x坐标
+    auto y = map_to_double(*re.second->history(),
+    [&](const std::shared_ptr<masscenter::save_type> p)
+        -> double
+        {
+            return p->position.y();
+        });//导出y坐标
+        
+    //创建图表
+    auto se = create_series("mc", x, y);
+    auto xa = create_axis("x", x);
+    auto ya = create_axis("y", y);
+    auto chart = create_chart("circle");
+    auto cv = create_view(this, chart, {xa, ya}, {se});    
+    this->setCentralWidget(cv);
+}   
+//....其他内容
+\end{lstlisting}
+}
+
+\begin{figure} [hb]
+    \centering 
+    \includegraphics[width=.75\textwidth]{result1.png}
+\caption{绘制出的图形} 
+\end{figure}
+
 % \subsection{多体问题}
 % 另一种经典的问题是多体问题，多体问题在这个框架下可以非常容易的解决，
 % 如下面的展示。
